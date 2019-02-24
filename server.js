@@ -63,15 +63,15 @@ const url = process.env.NODE_ENV === "production" ? production : development;
 const callbackUrl =
   process.env.NODE_ENV === "production" ? callback : developmentCallback;
 const scopesFormatted = scopes.join("%20");
+const client_id = process.env.CLIENT_ID;
+const client_secret = process.env.CLIENT_SECRET;
 
 app.get("/api/login", (req, res) => {
   const state = randomstring.generate(16);
   res.cookie(STATE_KEY, state);
 
   let authOptions = {
-    url: `https://accounts.spotify.com/authorize?client_id=${
-      process.env.CLIENT_ID
-    }&response_type=code&redirect_uri=${callbackUrl}&scope=${scopesFormatted}&state=${state}`,
+    url: `https://accounts.spotify.com/authorize?client_id=${client_id}&response_type=code&redirect_uri=${callbackUrl}&scope=${scopesFormatted}&state=${state}`,
     json: true
   };
 
@@ -95,19 +95,22 @@ app.get("/callback", (req, res) => {
       headers: {
         Authorization:
           "Basic " +
-          new Buffer.from(
-            process.env.client_id + ":" + process.env.client_secret
-          ).toString("base64")
+          new Buffer.from(client_id + ":" + client_secret).toString("base64")
       },
       json: true
     };
 
     request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
-        let access_token = body.access_token,
-          refresh_token = body.refresh_token;
+        let access_token = body.access_token;
+        let refresh_token = body.refresh_token;
         let expires_in = body.expires_in;
         const expiresAt = new Date().getTime() / 1000 + expires_in;
+        console.log(
+          "Retrieved token. It expires in " +
+            Math.floor(expiresAt - new Date().getTime() / 1000) +
+            " seconds!"
+        );
 
         res.redirect(
           `${url}/user?access_token=${access_token}&refresh_token=${refresh_token}&expires_at=${expiresAt}`
