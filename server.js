@@ -53,10 +53,9 @@ const scopes = [
   "user-library-read"
 ];
 const STATE_KEY = "spotify_auth_state";
-let hostname = req.headers.host
 const production = "https://sound-spot.herokuapp.com"
 const development = "http://localhost:3000"
-const url = (process.env.NODE_ENV ? production : development);
+const url = (process.env.NODE_ENV === 'production' ? production : development);
 
 app.get("/api/login", (_, res) => {
   const state = randomstring.generate(16);
