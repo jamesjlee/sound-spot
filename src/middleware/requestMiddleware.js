@@ -1,5 +1,6 @@
 import * as consts from "../constants/Consts";
 import { refreshAuthToken, logout } from "../actions/UserSessionActions";
+import { me } from "../actions/TopBarActions";
 import { isRSAA, apiMiddleware } from "redux-api-middleware";
 
 const Cookie = require("js-cookie");
@@ -17,6 +18,7 @@ function createRefreshMiddleware() {
           const isAccessTokenExpiring =
             expirationTime - Date.now() < 300000 &&
             expirationTime - Date.now() > 0;
+          // const isAccessTokenExpiring = Date.now() - 50000;
           const accessTokenTimeIsOver = expirationTime - Date.now() <= 0;
           // console.log(expirationTime - Date.now());
           if (refreshToken && isAccessTokenExpiring) {

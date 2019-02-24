@@ -31,6 +31,15 @@ class Player extends React.Component {
     autoPlayed: false
   };
 
+  constructor(props) {
+    super(props);
+    // this.handleSeekLineClick = this.handleSeekLineClick.bind(this);
+  }
+
+  componentDidMount() {
+    // document.getElementById("seekLine").addEventListener("click", this.handleSeekLineClick);
+  }
+
   componentWillUnmount() {
     this.state.songPositionMetadata.forEach((item) => {
       clearInterval(item.songInterval);
@@ -464,6 +473,19 @@ class Player extends React.Component {
     });
   }
 
+  // handleSeekLineClick(e) {
+  //   let seekLine = document.getElementsByClassName('rc-progress-line')
+  //   // console.log(e)
+  //   // let x = e.pageX - seekLine.offsetLeft,
+  //   //     y = e.pageY - seekLine.offsetTop,
+  //   //     clickedValue = x * seekLine.max / seekLine.offsetWidth;
+    
+  //   // console.log(x, y, clickedValue);
+  //   var left = (e.pageX - e.offsetX);
+  //   var totalWidth = seekLine.width();
+  //   var percentage = ( left / totalWidth );
+  // }
+
   render() {
     const {
       playingSong,
@@ -488,9 +510,11 @@ class Player extends React.Component {
         ) : null}
         {currentSongDuration !== 0 ? (
           <Line
+            id="seekLine"
             percent={this.state.songPercent}
             strokeWidth="1"
             strokeColor={"#2185d0"}
+            // onClick={(e) => this.handleSeekLineClick}
           />
         ) : null}
         <div id="player-actions" className="ui grid">

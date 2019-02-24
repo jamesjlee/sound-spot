@@ -169,7 +169,8 @@ app.get("/api/refresh_token", function(req, res) {
           Math.floor(expiresAt - new Date().getTime() / 1000) +
           " seconds!"
       );
-      res.send({
+
+      res.json({
         access_token: access_token,
         expires_at: expiresAt
       });
@@ -372,7 +373,7 @@ app.get("/api/me", function(req, res) {
 });
 
 app.get("*", function(req, res) {
-  res.sendFile(path.join(__dirname, "build", "index.html"))
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 app.listen(app.get("port"), "0.0.0.0", () => {

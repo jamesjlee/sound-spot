@@ -32,9 +32,18 @@ const userSession = (state = initialState, action) => {
       };
 
     case "REFRESH_TOKEN_FETCH_SUCCESS":
-      return {
-        ...state
-      };
+      if (action.payload) {
+        return {
+          ...state,
+          authToken: action.payload.access_token,
+          refreshToken: action.meta.refreshToken,
+          expiresAt: action.payload.expiresAt
+        };
+      } else {
+        return {
+          ...state
+        };
+      }
 
     case "LOGOUT_SUCCESS":
       return {
@@ -42,6 +51,20 @@ const userSession = (state = initialState, action) => {
         loggedOut: action.payload.logged_out
       };
 
+    case "REFRESH_TOKEN_FETCH":
+      return {
+        ...state,
+        refreshToken: action.refreshToken
+      };
+
+    case "REFRESH_TOKEN_FETCH":
+      return {
+        ...state,
+        authToken: action.authToken,
+        refreshToken: action.refreshToken,
+        expiresAt: action.expiresAt
+      };
+      
     default:
       return state;
   }

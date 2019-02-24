@@ -54,34 +54,62 @@ export function setTokenInfo(authToken, refreshToken, expiresAt) {
   };
 }
 
+// function refreshTokenAction(refreshToken) {
+//   const body = qs.stringify({
+//     refresh_token: refreshToken
+//   });
+//   return {
+//     [RSAA]: {
+//       endpoint: "/api/refresh_token?" + body,
+//       method: "GET",
+//       types: [
+//         "REFRESH_TOKEN_FETCH_REQUEST",
+//         {
+//           type: "REFRESH_TOKEN_FETCH_SUCCESS",
+//           meta: {
+//             refreshToken: refreshToken
+//           }
+//         },
+//         "REFRESH_TOKEN_FETCH_FAILURE"
+//       ]
+//     }
+//   };
+// }
+
+// export function refreshAuthToken(refreshToken) {
+//   return async (dispatch, getState) => {
+//     await dispatch(refreshTokenAction(refreshToken)).then(() => {
+//       dispatch(
+//         setTokenInfo(getState().authToken, refreshToken, getState().expiresAt)
+//       );
+//     });
+//   };
+// }
+
+// function afterRefreshed(refreshToken) {
+//   return {
+//     type: "AFTER_TOKEN_REFRESHED",
+//     authToken: data.access_token,
+//     refreshToken: refreshToken,
+//     expiresAt: data.expiresAt
+//   };
+// }
+
 function refreshTokenAction(refreshToken) {
-  const body = qs.stringify({
-    refresh_token: refreshToken
-  });
   return {
-    [RSAA]: {
-      endpoint: "/api/refresh_token?" + body,
-      method: "GET",
-      types: [
-        "REFRESH_TOKEN_FETCH_REQUEST",
-        "REFRESH_TOKEN_FETCH_SUCCESS",
-        "REFRESH_TOKEN_FETCH_FAILURE"
-      ]
-    }
+    type: "REFRESH_TOKEN_FETCH",
+    refreshToken: refreshToken
   };
 }
 
 export function refreshAuthToken(refreshToken) {
   return async (dispatch, getState) => {
-    await dispatch(refreshTokenAction(refreshToken)).then((data) =>
-      dispatch(
-        setTokenInfo(
-          data.payload.access_token,
-          refreshToken,
-          data.payload.expires_at
-        )
-      )
-    );
+    await dispatch(refreshTokenAction(refreshToken));
+    return fetch(`/api/refresh_token?refresh_token=${refreshToken}`)
+      .then((response) => response.json())
+      .then((data) =>
+        dispatch(setTokenInfo(data.access_token, refreshToken, data.expires_at))
+      );
   };
 }
 

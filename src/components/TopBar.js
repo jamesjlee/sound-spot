@@ -27,7 +27,7 @@ class TopBar extends React.Component {
             <h1 className="ui header">SoundSpot</h1>
           </div>
           <div className="right item">
-            <a class="ui blue label">Hello, {displayName}</a>
+            <a className="ui blue label">Hello, {displayName}</a>
             <Logout />
           </div>
         </div>

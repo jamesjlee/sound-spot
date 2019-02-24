@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import * as consts from "../constants/Consts";
 import { fetchSongList } from "../actions/SongListActions";
+import { me } from "../actions/TopBarActions";
 import {
   setDeviceId,
   songFinishedPlaying,
@@ -38,6 +39,7 @@ class SongList extends React.Component {
 
     this.props.fetchSongList(consts.DEFAULT_SONG_GENRE, 0).then(() => {
       // this.props.getCurrentPlaybackState();
+      this.props.me();
       this.checkIfWindowMatchesResolution(consts.DEFAULT_SONG_GENRE, 0);
     });
   }
@@ -184,7 +186,10 @@ class SongList extends React.Component {
       indexOfSelectedGenre,
       songsLoaded,
       isLoadingSongs,
-      product
+      product,
+      expiresAt,
+      refreshToken,
+      authToken
     } = this.props;
 
     // if (product === "premium") {
@@ -228,8 +233,11 @@ class SongList extends React.Component {
         </div>
       );
     } else {
+      console.log(Cookie.get(consts.COOKIE_PATH));
+      console.log(Cookie.get(consts.COOKIE_REFRESH_PATH));
+      console.log(Cookie.get(consts.COOKIE_EXPIRES_PATH));
       return (
-        <div id="premium-message" className='ui'>
+        <div id="premium-message" className="ui">
           <p>
             Sorry! You must be subscribed to Spotify Premium to use this
             application.
@@ -258,7 +266,10 @@ const mapStateToSongListProps = (state) => {
     positions: state.playerReducer.positionsm,
     currentSongName: state.playerReducer.currentSongName,
     currentSongDuration: state.playerReducer.currentSongDuration,
-    product: state.topBarReducer.product
+    product: state.topBarReducer.product,
+    expiresAt: state.userSessionReducer.expiresAt,
+    authToken: state.userSessionReducer.authToken,
+    refreshToken: state.userSessionReducer.refreshToken
   };
 };
 
@@ -269,6 +280,9 @@ const mapDispatchToSongListProps = (dispatch) => {
     songFinishedPlaying: () => dispatch(songFinishedPlaying()),
     getCurrentPlaybackState: () => {
       dispatch(getCurrentPlaybackState());
+    },
+    me: () => {
+      dispatch(me());
     }
   };
 };

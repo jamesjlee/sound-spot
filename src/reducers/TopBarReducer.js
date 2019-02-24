@@ -6,12 +6,18 @@ const initialState = {
 const topBarReducer = (state = initialState, action) => {
   switch (action.type) {
     case "ME_SUCCESS":
-      console.log(action.payload.body);
-      return {
-        ...state,
-        displayName: action.payload.body.display_name,
-        product: action.payload.body.product
-      };
+      if (action.payload) {
+        return {
+          ...state,
+          displayName: action.payload.body.display_name,
+          product: action.payload.body.product
+        };
+      } else {
+        return {
+          ...state
+        };
+      }
+
     default:
       return state;
   }
