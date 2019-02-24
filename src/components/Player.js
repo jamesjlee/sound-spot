@@ -479,7 +479,7 @@ class Player extends React.Component {
   //   // let x = e.pageX - seekLine.offsetLeft,
   //   //     y = e.pageY - seekLine.offsetTop,
   //   //     clickedValue = x * seekLine.max / seekLine.offsetWidth;
-    
+
   //   // console.log(x, y, clickedValue);
   //   var left = (e.pageX - e.offsetX);
   //   var totalWidth = seekLine.width();
@@ -600,6 +600,7 @@ class Player extends React.Component {
               max={100}
               value={this.state.volume}
               marks={{
+                0: 0,
                 10: 10,
                 20: 20,
                 30: 30,
