@@ -6,6 +6,7 @@ const SpotifyWebApi = require("spotify-web-api-node");
 const randomstring = require("randomstring");
 const cookieParser = require("cookie-parser");
 const request = require("request-promise");
+const cors = require("cors");
 
 const app = express();
 app.set("port", process.env.PORT || 5000);
@@ -16,6 +17,7 @@ if (process.env.NODE_ENV === "production") {
   app.use("/", express.static(path.join(__dirname, "public")));
 }
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -53,14 +55,27 @@ const scopes = [
   "user-library-read"
 ];
 const STATE_KEY = "spotify_auth_state";
-const production = "https://sound-spot.herokuapp.com"
-const development = "http://localhost:3000"
-const url = (process.env.NODE_ENV === 'production' ? production : development);
+const production = "https://sound-spot.herokuapp.com";
+const callback = "https://sound-spot.herokuapp.com/callback";
+const development = "http://localhost:3000";
+const developmentCallback = "http://localhost:5000/callback";
+const url = process.env.NODE_ENV === "production" ? production : development;
+const callbackUrl =
+  process.env.NODE_ENV === "production" ? callback : developmentCallback;
+const scopesFormatted = scopes.join("%20");
 
-app.get("/api/login", (_, res) => {
+app.get("/api/login", (req, res) => {
   const state = randomstring.generate(16);
   res.cookie(STATE_KEY, state);
-  res.json({ authUrl: spotifyApi.createAuthorizeURL(scopes, state) });
+
+  let authOptions = {
+    url: `https://accounts.spotify.com/authorize?client_id=${
+      process.env.CLIENT_ID
+    }&response_type=code&redirect_uri=${callbackUrl}&scope=${scopesFormatted}&state=${state}`,
+    json: true
+  };
+
+  res.send({authUrl: authOptions.url});
 });
 
 app.get("/callback", (req, res) => {
