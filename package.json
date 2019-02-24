@@ -40,7 +40,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "postinstall": "react-scripts build"
+    "postinstall": "react-scripts build && serve -s build"
   },
   "engines": {
     "node": "~10.15.0",
