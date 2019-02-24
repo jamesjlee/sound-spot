@@ -6,6 +6,7 @@ const SpotifyWebApi = require("spotify-web-api-node");
 const randomstring = require("randomstring");
 const cookieParser = require("cookie-parser");
 const request = require("request-promise");
+const os = require("os")
 
 const app = express();
 app.set("port", process.env.PORT || 5000);
@@ -53,6 +54,7 @@ const scopes = [
   "user-library-read"
 ];
 const STATE_KEY = "spotify_auth_state";
+const hostname = os.hostname();
 
 app.get("/api/login", (_, res) => {
   const state = randomstring.generate(16);
@@ -80,7 +82,7 @@ app.get("/callback", (req, res) => {
             " seconds!"
         );
         res.redirect(
-          `http://localhost:3000/user?access_token=${access_token}&refresh_token=${refresh_token}&expires_at=${expiresAt}`
+          `${hostname}/user?access_token=${access_token}&refresh_token=${refresh_token}&expires_at=${expiresAt}`
         );
       })
       .catch((err) => {
