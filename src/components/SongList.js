@@ -233,9 +233,6 @@ class SongList extends React.Component {
         </div>
       );
     } else {
-      console.log(Cookie.get(consts.COOKIE_PATH));
-      console.log(Cookie.get(consts.COOKIE_REFRESH_PATH));
-      console.log(Cookie.get(consts.COOKIE_EXPIRES_PATH));
       return (
         <div id="premium-message" className="ui">
           <p>
