@@ -75,7 +75,7 @@ app.get("/api/login", (req, res) => {
     json: true
   };
 
-  res.send({authUrl: authOptions.url});
+  res.send({ authUrl: authOptions.url });
 });
 
 app.get("/callback", (req, res) => {
@@ -85,26 +85,37 @@ app.get("/callback", (req, res) => {
     res.redirect("/#/error/state_mismatch");
   } else {
     res.clearCookie(STATE_KEY);
-    spotifyApi
-      .authorizationCodeGrant(code)
-      .then((data) => {
-        const { expires_in, access_token, refresh_token } = data.body;
-        spotifyApi.setAccessToken(access_token);
-        spotifyApi.setRefreshToken(refresh_token);
+    let authOptions = {
+      url: "https://accounts.spotify.com/api/token",
+      form: {
+        code: code,
+        redirect_uri: callbackUrl,
+        grant_type: "authorization_code"
+      },
+      headers: {
+        Authorization:
+          "Basic " +
+          new Buffer.from(
+            process.env.client_id + ":" + process.env.client_secret
+          ).toString("base64")
+      },
+      json: true
+    };
+
+    request.post(authOptions, function(error, response, body) {
+      if (!error && response.statusCode === 200) {
+        let access_token = body.access_token,
+          refresh_token = body.refresh_token;
+        let expires_in = body.expires_in;
         const expiresAt = new Date().getTime() / 1000 + expires_in;
-        console.log(
-          "Retrieved token. It expires in " +
-            Math.floor(expiresAt - new Date().getTime() / 1000) +
-            " seconds!"
-        );
+
         res.redirect(
           `${url}/user?access_token=${access_token}&refresh_token=${refresh_token}&expires_at=${expiresAt}`
         );
-      })
-      .catch((err) => {
-        console.log(err);
+      } else {
         res.redirect("/#/error/invalid_token");
-      });
+      }
+    });
   }
 });
 
