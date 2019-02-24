@@ -11,10 +11,16 @@ const initialState = {
 const userSession = (state = initialState, action) => {
   switch (action.type) {
     case "GET_AUTH_URL_FETCH_SUCCESS":
-      return {
-        ...state,
-        authUrl: action.payload.authUrl
-      };
+      if (action.payload) {
+        return {
+          ...state,
+          authUrl: action.payload.authUrl
+        };
+      } else {
+        return {
+          ...state
+        };
+      }
 
     case "SET_TOKEN_INFO":
       return {
