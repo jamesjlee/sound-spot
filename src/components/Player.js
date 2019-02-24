@@ -51,7 +51,7 @@ class Player extends React.Component {
     if (
       (nextProps.currentSongName !== this.props.currentSongName ||
         (nextProps.currentSongName === this.props.currentSongName &&
-          this.state.startCalled)) &&
+          (this.state.startCalled || nextProps.songClickedWithMouse))) &&
       nextProps.playingSong &&
       !nextProps.currentSongFinished &&
       (this.state.pauseCalled ||
@@ -95,6 +95,11 @@ class Player extends React.Component {
             return retVal;
           })
         });
+        nextProps.trickleUpState(this.state);
+        this.updateSeek(
+          this.state.currentSongPosition,
+          nextProps.currentSongDuration
+        );
         this.playNextSong(nextProps);
         return;
       }
@@ -124,7 +129,7 @@ class Player extends React.Component {
         });
       } else {
         this.setState({
-          currentSongPosition: (this.state.currentSongPosition + 1000),
+          currentSongPosition: this.state.currentSongPosition + 1000,
           songPositionMetadata: this.state.songPositionMetadata.map((item) => {
             let retVal = { ...item };
             if (item.songName === nextProps.currentSongName) {
@@ -179,6 +184,11 @@ class Player extends React.Component {
             return retVal;
           })
         });
+        nextProps.trickleUpState(this.state);
+        this.updateSeek(
+          this.state.currentSongPosition,
+          nextProps.currentSongDuration
+        );
         this.playNextSong(nextProps);
         return;
       }
