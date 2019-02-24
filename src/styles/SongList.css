@@ -1,0 +1,11 @@
+.ui#song-list-content {
+   /* padding-top: 5000px !important; */
+   padding-top: 150px;
+   padding-bottom: 150px;
+}
+
+.ui#premium-message {
+   font-size: 50px;
+   padding-top: 150px;
+   padding-bottom: 150px;
+}

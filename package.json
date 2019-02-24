@@ -1,14 +1,42 @@
 {
-  "name": "soundcloud-dark",
+  "name": "sound-spot",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^16.8.1",
-    "react-dom": "^16.8.1",
-    "react-scripts": "2.1.4"
+    "concurrently": "^4.1.0",
+    "cookie-parser": "^1.4.4",
+    "dotenv": "^6.2.0",
+    "http-proxy-middleware": "^0.19.1",
+    "jquery": "^3.3.1",
+    "js-cookie": "^2.2.0",
+    "jsonwebtoken": "^8.4.0",
+    "load-script": "^1.0.0",
+    "lodash": "^4.17.11",
+    "node-fetch": "^2.3.0",
+    "query-string": "^6.2.0",
+    "randomstring": "^1.1.5",
+    "rc-progress": "^2.3.0",
+    "rc-slider": "^8.6.5",
+    "react": "^16.8.2",
+    "react-dom": "^16.8.2",
+    "react-load-script": "0.0.6",
+    "react-redux": "^6.0.0",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "2.1.5",
+    "redux": "^4.0.1",
+    "redux-api-middleware": "^3.0.1",
+    "redux-thunk": "^2.3.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "semantic-ui-css": "^2.4.1",
+    "spotify-web-api-node": "^4.0.0",
+    "uuid": "^3.3.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node server.js",
+    "client": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -21,5 +49,13 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "proxy": "http://localhost:5000",
+  "devDependencies": {
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.9.1",
+    "react-test-renderer": "^16.8.2",
+    "redux-mock-store": "^1.5.3",
+    "remote-redux-devtools": "^0.5.16"
+  }
 }

@@ -1,0 +1,41 @@
+.progress#song-progress {
+  margin: 0;
+}
+.progress#volumeBar {
+  margin: 0;
+}
+
+.item#player-action-right {
+  padding: 0;
+}
+
+.ui#player-actions {
+  margin-top: 10px;
+}
+
+.progress-text {
+  text-align: center !important;
+  right: 0 !important;
+  left: 0 !important;
+}
+
+.progress#volume-controller {
+  margin: 0;
+}
+
+#volumeSlider {
+  width: 100px;
+}
+
+#player {
+  width: 100%;
+  min-width: 300px;
+  min-height: 100px;
+}
+
+#player-actions {
+  width: 100%;
+  min-width: 500px;
+}
+
+
