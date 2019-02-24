@@ -10,7 +10,12 @@ const request = require("request-promise");
 const app = express();
 app.set("port", process.env.PORT || 5000);
 
-app.use("/", express.static(path.join(__dirname, "public")));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "build")));
+} else {
+  app.use("/", express.static(path.join(__dirname, "public")));
+}
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -309,7 +314,7 @@ app.get("/api/seek", function(req, res) {
     });
 });
 
-app.get('/api/me', function(req,res) {
+app.get("/api/me", function(req, res) {
   let loggedInSpotifyApi = new SpotifyWebApi();
   loggedInSpotifyApi.setAccessToken(req.cookies.oauthToken);
 
@@ -332,7 +337,7 @@ app.get('/api/me', function(req,res) {
       console.log(err);
       res.redirect("/#/error/could_not_find_user");
     });
-})
+});
 
 app.listen(app.get("port"), "0.0.0.0", () => {
   console.log(`Find the server at: http://localhost:${app.get("port")}/`); // eslint-disable-line no-console
