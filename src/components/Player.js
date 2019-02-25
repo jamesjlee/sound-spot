@@ -28,17 +28,12 @@ class Player extends React.Component {
     interval: null,
     currentSongPosition: 0,
     songPositionMetadata: [],
-    autoPlayed: false
+    autoPlayed: false,
+    lastSongPlayed: false,
+    prevSong: null,
+    currSong: null,
+    lastSong: null
   };
-
-  constructor(props) {
-    super(props);
-    // this.handleSeekLineClick = this.handleSeekLineClick.bind(this);
-  }
-
-  componentDidMount() {
-    // document.getElementById("seekLine").addEventListener("click", this.handleSeekLineClick);
-  }
 
   componentWillUnmount() {
     this.state.songPositionMetadata.forEach((item) => {
@@ -54,6 +49,7 @@ class Player extends React.Component {
         forwardCalled: false,
         startCalled: false,
         autoPlayed: false
+        // lastSongPlayed: false
       });
     }
 
@@ -73,6 +69,7 @@ class Player extends React.Component {
       let songFound = this.state.songPositionMetadata.find((item) => {
         return item.songName === nextProps.currentSongName;
       });
+
       if (songFound) {
         this.updateProgressBar(songFound, nextProps);
       } else {
@@ -99,6 +96,7 @@ class Player extends React.Component {
               retVal.songPosition = 0;
               retVal.songDuration = nextProps.currentSongDuration;
               retVal.songInterval = interval;
+              retVal.songIndex = nextProps.indexOfSong;
             }
             return retVal;
           })
@@ -131,7 +129,9 @@ class Player extends React.Component {
               songName: nextProps.currentSongName,
               songPosition: this.state.currentSongPosition,
               songDuration: nextProps.currentSongDuration,
-              songInterval: interval
+              songInterval: interval,
+              songIndex: nextProps.indexOfSong,
+              songTouched: true
             }
           ]
         });
@@ -144,6 +144,8 @@ class Player extends React.Component {
               retVal.songPosition = this.state.currentSongPosition;
               retVal.songDuration = nextProps.currentSongDuration;
               retVal.songInterval = interval;
+              retVal.songIndex = nextProps.indexOfSong;
+              retVal.songTouched = true;
             }
             return retVal;
           })
@@ -188,6 +190,7 @@ class Player extends React.Component {
               retVal.songPosition = 0;
               retVal.songDuration = nextProps.currentSongDuration;
               retVal.songInterval = interval;
+              retVal.songIndex = nextProps.indexOfSong;
             }
             return retVal;
           })
@@ -209,6 +212,8 @@ class Player extends React.Component {
             retVal.songPosition = this.state.currentSongPosition;
             retVal.songDuration = nextProps.currentSongDuration;
             retVal.songInterval = interval;
+            retVal.songIndex = nextProps.indexOfSong;
+            retVal.songTouched = true;
           }
           return retVal;
         })
@@ -389,6 +394,37 @@ class Player extends React.Component {
           autoPlayed: false
         });
         this.props.trickleUpState(this.state);
+      } else {
+        let positionsMetadata = this.state.songPositionMetadata.filter(
+          (item) => {
+            return (
+              songList[indexOfSelectedGenre].songs[
+                songList[indexOfSelectedGenre].songs.length - 1
+              ].name === item.songName
+            );
+          }
+        );
+        let position =
+          positionsMetadata.length > 0 ? positionsMetadata[0].songPosition : 0;
+
+        this.props.playSongWithPlayer(
+          songList[indexOfSelectedGenre].songs[
+            songList[indexOfSelectedGenre].songs.length - 1
+          ],
+          songList[indexOfSelectedGenre].songs.length - 1,
+          lengthOfSongList,
+          position
+        );
+
+        this.props.songNotClickedWithMouse();
+        this.setState({
+          pauseCalled: false,
+          forwardCalled: false,
+          backwardCalled: true,
+          startCalled: false,
+          autoPlayed: false
+        });
+        this.props.trickleUpState(this.state);
       }
     },
     250
@@ -433,6 +469,34 @@ class Player extends React.Component {
           autoPlayed: false
         });
         this.props.trickleUpState(this.state);
+      } else {
+        let positionsMetadata = this.state.songPositionMetadata.filter(
+          (item) => {
+            return (
+              songList[indexOfSelectedGenre].songs[0].name === item.songName
+            );
+          }
+        );
+
+        let position =
+          positionsMetadata.length > 0 ? positionsMetadata[0].songPosition : 0;
+
+        this.props.playSongWithPlayer(
+          songList[indexOfSelectedGenre].songs[0],
+          0,
+          lengthOfSongList,
+          position
+        );
+
+        this.props.songNotClickedWithMouse();
+        this.setState({
+          forwardCalled: true,
+          startCalled: false,
+          backwardCalled: false,
+          pauseCalled: false,
+          autoPlayed: false
+        });
+        this.props.trickleUpState(this.state);
       }
     },
     250
@@ -462,14 +526,44 @@ class Player extends React.Component {
         lengthOfSongList,
         position
       );
+      this.props.songNotClickedWithMouse();
+      this.setState({
+        autoPlayed: true,
+        forwardCalled: false,
+        backwardCalled: false,
+        pauseCalled: false,
+        startCalled: false,
+        lastSongPlayed: false
+      });
+    } else {
+      // if last song is played... keep looping songlist (i.e. go to the beginning of the list)
+      let positionsMetadata = this.state.songPositionMetadata.filter((item) => {
+        return songList[indexOfSelectedGenre].songs[0].name === item.songName;
+      });
+
+      let position =
+        positionsMetadata.length > 0 ? positionsMetadata[0].songPosition : 0;
+
+      this.props.playSongWithPlayer(
+        songList[indexOfSelectedGenre].songs[0],
+        0,
+        lengthOfSongList,
+        position
+      );
+
+      this.props.songNotClickedWithMouse();
+      this.setState({
+        autoPlayed: false,
+        forwardCalled: false,
+        backwardCalled: false,
+        pauseCalled: true,
+        startCalled: false,
+        lastSongPlayed: true,
+        lastSong: this.props.currentSongName,
+        lastSongIndex: this.props.indexOfSong
+      });
+      this.props.trickleUpState(this.state);
     }
-    this.setState({
-      autoPlayed: true,
-      forwardCalled: false,
-      backwardCalled: false,
-      pauseCalled: false,
-      startCalled: false
-    });
   }
 
   // handleSeekLineClick(e) {

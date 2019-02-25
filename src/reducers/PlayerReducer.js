@@ -25,6 +25,7 @@ const playerReducer = (state = initialState, action) => {
         ...state,
         playingSong: action.meta.playingSong,
         currentSongFinished: false,
+        currentSongName: action.meta.currentSongName,
         positions: state.positions.map((item) => {
           if (item.songName === action.currentSongName) {
             return {
