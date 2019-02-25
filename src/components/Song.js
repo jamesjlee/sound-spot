@@ -64,7 +64,7 @@ class Song extends React.Component {
         );
       }
     },
-    100
+    250
   );
 
   render() {

@@ -60,7 +60,7 @@ class Player extends React.Component {
     if (
       (nextProps.currentSongName !== this.props.currentSongName ||
         (nextProps.currentSongName === this.props.currentSongName &&
-          (this.state.startCalled || nextProps.songClickedWithMouse))) &&
+          this.state.startCalled)) &&
       nextProps.playingSong &&
       !nextProps.currentSongFinished &&
       (this.state.pauseCalled ||
@@ -88,7 +88,6 @@ class Player extends React.Component {
 
     let interval = setInterval(() => {
       if (this.state.currentSongPosition > nextProps.currentSongDuration) {
-        // clearInterval(interval);
         this.state.songPositionMetadata.forEach((item) => {
           clearInterval(item.songInterval);
         });
@@ -261,7 +260,7 @@ class Player extends React.Component {
       });
       this.props.trickleUpState(this.state);
     }
-  }, 100);
+  }, 250);
 
   handlePlayClick = _.debounce(
     (
@@ -301,7 +300,7 @@ class Player extends React.Component {
       });
       this.props.trickleUpState(this.state);
     },
-    100
+    250
   );
 
   handleMouseClickOnVolume = () => {
@@ -392,7 +391,7 @@ class Player extends React.Component {
         this.props.trickleUpState(this.state);
       }
     },
-    100
+    250
   );
 
   handleForwardClick = _.debounce(
@@ -436,7 +435,7 @@ class Player extends React.Component {
         this.props.trickleUpState(this.state);
       }
     },
-    100
+    250
   );
 
   playNextSongInList(
