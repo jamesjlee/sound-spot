@@ -19,9 +19,8 @@ function createRefreshMiddleware() {
             expirationTime - Date.now() < 300000 &&
             expirationTime - Date.now() > 0;
           // const isAccessTokenExpiring = Date.now() - 50000;
-          const accessTokenTimeIsOver = expirationTime - Date.now() <= 0;
-          // console.log(expirationTime - Date.now());
-          if (refreshToken && isAccessTokenExpiring) {
+          let accessTokenTimeIsOver = expirationTime - Date.now() <= 0;
+          if (typeof refreshToken !== "undefined" && isAccessTokenExpiring) {
             console.log("REFRESHING ACCESS TOKEN");
             postponedRSAAs.push(action);
             if (postponedRSAAs.length === 1) {
@@ -34,16 +33,20 @@ function createRefreshMiddleware() {
             }
             return rsaaMiddleware(next)(action);
           } else if (
-            refreshToken &&
-            accessTokenTimeIsOver &&
-            !getState().userSessionReducer.authUrl
+            typeof refreshToken !== "undefined" &&
+            accessTokenTimeIsOver
           ) {
             console.log(
               "CANNOT REFRESH ACCESS TOKEN. TIME IS UP. LOGGING OUT AND REDIRECTING TO LOGIN PAGE."
             );
-            dispatch(logout()).then(() => {
-              window.location = window.location.origin + "/login";
-            });
+            postponedRSAAs.push(action);
+            if (postponedRSAAs.length === 1) {
+              return rsaaMiddleware(next)(dispatch(() => logout())).then(() => {
+                window.location = window.location.origin + "/login";
+                const postponedRSAA = postponedRSAAs.pop();
+                return dispatch(postponedRSAA);
+              });
+            }
           }
           return rsaaMiddleware(next)(action);
         } catch (e) {
