@@ -107,6 +107,7 @@ class Song extends React.Component {
       >
         <div className="image">
           <img
+             id={`${song.name}-${song.id}-image`}
             src={
               song.album.images
                 ? song.album.images[0].url

@@ -385,6 +385,24 @@ class Player extends React.Component {
           position
         );
 
+        if (
+          document.getElementById(
+            songList[indexOfSelectedGenre].songs[indexOfSong - 1].name +
+              "-" +
+              songList[indexOfSelectedGenre].songs[indexOfSong - 1].id +
+              "-image"
+          ) !== null
+        ) {
+          document
+            .getElementById(
+              songList[indexOfSelectedGenre].songs[indexOfSong - 1].name +
+                "-" +
+                songList[indexOfSelectedGenre].songs[indexOfSong - 1].id +
+                "-image"
+            )
+            .scrollIntoView();
+        }
+
         this.props.songNotClickedWithMouse();
         this.setState({
           pauseCalled: false,
@@ -415,6 +433,32 @@ class Player extends React.Component {
           lengthOfSongList,
           position
         );
+
+        if (
+          document.getElementById(
+            songList[indexOfSelectedGenre].songs[
+              songList[indexOfSelectedGenre].songs.length - 1
+            ].name +
+              "-" +
+              songList[indexOfSelectedGenre].songs[
+                songList[indexOfSelectedGenre].songs.length - 1
+              ].id +
+              "-image"
+          ) !== null
+        ) {
+          document
+            .getElementById(
+              songList[indexOfSelectedGenre].songs[
+                songList[indexOfSelectedGenre].songs.length - 1
+              ].name +
+                "-" +
+                songList[indexOfSelectedGenre].songs[
+                  songList[indexOfSelectedGenre].songs.length - 1
+                ].id +
+                "-image"
+            )
+            .scrollIntoView();
+        }
 
         this.props.songNotClickedWithMouse();
         this.setState({
@@ -460,6 +504,24 @@ class Player extends React.Component {
           position
         );
 
+        if (
+          document.getElementById(
+            songList[indexOfSelectedGenre].songs[indexOfSong + 1].name +
+              "-" +
+              songList[indexOfSelectedGenre].songs[indexOfSong + 1].id +
+              "-image"
+          ) !== null
+        ) {
+          document
+            .getElementById(
+              songList[indexOfSelectedGenre].songs[indexOfSong + 1].name +
+                "-" +
+                songList[indexOfSelectedGenre].songs[indexOfSong + 1].id +
+                "-image"
+            )
+            .scrollIntoView();
+        }
+
         this.props.songNotClickedWithMouse();
         this.setState({
           forwardCalled: true,
@@ -487,6 +549,24 @@ class Player extends React.Component {
           lengthOfSongList,
           position
         );
+
+        if (
+          document.getElementById(
+            songList[indexOfSelectedGenre].songs[0].name +
+              "-" +
+              songList[indexOfSelectedGenre].songs[0].id +
+              "-image"
+          ) !== null
+        ) {
+          document
+            .getElementById(
+              songList[indexOfSelectedGenre].songs[0].name +
+                "-" +
+                songList[indexOfSelectedGenre].songs[0].id +
+                "-image"
+            )
+            .scrollIntoView();
+        }
 
         this.props.songNotClickedWithMouse();
         this.setState({
@@ -526,6 +606,25 @@ class Player extends React.Component {
         lengthOfSongList,
         position
       );
+
+      if (
+        document.getElementById(
+          songList[indexOfSelectedGenre].songs[indexOfSong + 1].name +
+            "-" +
+            songList[indexOfSelectedGenre].songs[indexOfSong + 1].id +
+            "-image"
+        ) !== null
+      ) {
+        document
+          .getElementById(
+            songList[indexOfSelectedGenre].songs[indexOfSong + 1].name +
+              "-" +
+              songList[indexOfSelectedGenre].songs[indexOfSong + 1].id +
+              "-image"
+          )
+          .scrollIntoView();
+      }
+
       this.props.songNotClickedWithMouse();
       this.setState({
         autoPlayed: true,
@@ -550,6 +649,24 @@ class Player extends React.Component {
         lengthOfSongList,
         position
       );
+
+      if (
+        document.getElementById(
+          songList[indexOfSelectedGenre].songs[0].name +
+            "-" +
+            songList[indexOfSelectedGenre].songs[0].id +
+            "-image"
+        ) !== null
+      ) {
+        document
+          .getElementById(
+            songList[indexOfSelectedGenre].songs[0].name +
+              "-" +
+              songList[indexOfSelectedGenre].songs[0].id +
+              "-image"
+          )
+          .scrollIntoView();
+      }
 
       this.props.songNotClickedWithMouse();
       this.setState({
